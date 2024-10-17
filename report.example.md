@@ -147,3 +147,286 @@ Google Analytics и Yandex.Metrica используются для отслеж�
 
 13.2 Блог и статьи
 На блоге сайта публикуются статьи об актуальных трендах в области технологий и обзоры новых продуктов.
+
+
+                                                                             ┌──(kali㉿kali)-[~]
+└─$ whatweb --help
+
+.$$$     $.                                   .$$$     $.
+$$$$     $$. .$$$  $$$ .$$$$$$.  .$$$$$$$$$$. $$$$     $$. .$$$$$$$. .$$$$$$.
+$ $$     $$$ $ $$  $$$ $ $$$$$$. $$$$$ $$$$$$ $ $$     $$$ $ $$   $$ $ $$$$$$.
+$ `$     $$$ $ `$  $$$ $ `$  $$$ $$' $ `$ `$$ $ `$     $$$ $ `$      $ `$  $$$'
+$. $     $$$ $. $$$$$$ $. $$$$$$ `$  $. $  :' $. $     $$$ $. $$$$   $. $$$$$.
+$::$  .  $$$ $::$  $$$ $::$  $$$     $::$     $::$  .  $$$ $::$      $::$  $$$$
+$;;$ $$$ $$$ $;;$  $$$ $;;$  $$$     $;;$     $;;$ $$$ $$$ $;;$      $;;$  $$$$
+$$$$$$ $$$$$ $$$$  $$$ $$$$  $$$     $$$$     $$$$$$ $$$$$ $$$$$$$$$ $$$$$$$$$'
+
+
+WhatWeb - Next generation web scanner version 0.5.5.
+Developed by Andrew Horton (urbanadventurer) and Brendan Coles (bcoles).
+Homepage: https://www.morningstarsecurity.com/research/whatweb
+
+Usage: whatweb [options] <URLs>
+
+TARGET SELECTION:
+  <TARGETs>                     Enter URLs, hostnames, IP addresses, filenames or
+                                IP ranges in CIDR, x.x.x-x, or x.x.x.x-x.x.x.x
+                                format.
+  --input-file=FILE, -i         Read targets from a file. You can pipe
+                                hostnames or URLs directly with -i /dev/stdin.
+
+TARGET MODIFICATION:
+  --url-prefix                  Add a prefix to target URLs.
+  --url-suffix                  Add a suffix to target URLs.
+  --url-pattern                 Insert the targets into a URL.
+                                e.g. example.com/%insert%/robots.txt
+
+AGGRESSION:
+The aggression level controls the trade-off between speed/stealth and
+reliability.
+  --aggression, -a=LEVEL        Set the aggression level. Default: 1.
+  1. Stealthy                   Makes one HTTP request per target and also
+                                follows redirects.
+  3. Aggressive                 If a level 1 plugin is matched, additional
+                                requests will be made.
+  4. Heavy                      Makes a lot of HTTP requests per target. URLs
+                                from all plugins are attempted.
+
+HTTP OPTIONS:
+  --user-agent, -U=AGENT        Identify as AGENT instead of WhatWeb/0.5.5.
+  --header, -H                  Add an HTTP header. eg "Foo:Bar". Specifying a
+                                default header will replace it. Specifying an
+                                empty value, e.g. "User-Agent:" will remove it.
+  --follow-redirect=WHEN        Control when to follow redirects. WHEN may be
+                                `never', `http-only', `meta-only', `same-site',
+                                or `always'. Default: always.
+  --max-redirects=NUM           Maximum number of redirects. Default: 10.
+
+AUTHENTICATION:
+  --user, -u=<user:password>    HTTP basic authentication.
+  --cookie, -c=COOKIES          Use cookies, e.g. 'name=value; name2=value2'.
+  --cookie-jar=FILE             Read cookies from a file.
+
+PROXY:
+  --proxy                       <hostname[:port]> Set proxy hostname and port.
+                                Default: 8080.
+  --proxy-user                  <username:password> Set proxy user and password.
+
+PLUGINS:
+  --list-plugins, -l            List all plugins.
+  --info-plugins, -I=[SEARCH]   List all plugins with detailed information.
+                                Optionally search with keywords in a comma
+                                delimited list.
+  --search-plugins=STRING       Search plugins for a keyword.
+  --plugins, -p=LIST            Select plugins. LIST is a comma delimited set
+                                of selected plugins. Default is all.
+                                Each element can be a directory, file or plugin
+                                name and can optionally have a modifier, +/-.
+                                Examples: +/tmp/moo.rb,+/tmp/foo.rb
+                                title,md5,+./plugins-disabled/
+                                ./plugins-disabled,-md5
+                                -p + is a shortcut for -p +plugins-disabled.
+  --grep, -g=STRING|REGEXP      Search for STRING or a Regular Expression. Shows
+                                only the results that match.
+                                Examples: --grep "hello"
+                                --grep "/he[l]*o/"
+  --custom-plugin=DEFINITION    Define a custom plugin named Custom-Plugin,
+                                Examples: ":text=>'powered by abc'"
+                                ":version=>/powered[ ]?by ab[0-9]/"
+                                ":ghdb=>'intitle:abc \"powered by abc\"'"
+                                ":md5=>'8666257030b94d3bdb46e05945f60b42'"
+                                "{:text=>'powered by abc'}"
+  --dorks=PLUGIN                List Google dorks for the selected plugin.
+
+OUTPUT:
+  --verbose, -v                 Verbose output includes plugin descriptions.
+                                Use twice for debugging.
+  --colour,--color=WHEN         control whether colour is used. WHEN may be
+                                `never', `always', or `auto'.
+  --quiet, -q                   Do not display brief logging to STDOUT.
+  --no-errors                   Suppress error messages.
+
+LOGGING:
+  --log-brief=FILE              Log brief, one-line output.
+  --log-verbose=FILE            Log verbose output.
+  --log-errors=FILE             Log errors.
+  --log-xml=FILE                Log XML format.
+  --log-json=FILE               Log JSON format.
+  --log-sql=FILE                Log SQL INSERT statements.
+  --log-sql-create=FILE         Create SQL database tables.
+  --log-json-verbose=FILE       Log JSON Verbose format.
+  --log-magictree=FILE          Log MagicTree XML format.
+  --log-object=FILE             Log Ruby object inspection format.
+  --log-mongo-database          Name of the MongoDB database.
+  --log-mongo-collection        Name of the MongoDB collection.
+                                Default: whatweb.
+  --log-mongo-host              MongoDB hostname or IP address.
+                                Default: 0.0.0.0.
+  --log-mongo-username          MongoDB username. Default: nil.
+  --log-mongo-password          MongoDB password. Default: nil.
+  --log-elastic-index           Name of the index to store results. Default: whatweb
+  --log-elastic-host            Host:port of the elastic http interface. Default: 127.0.0.1:9200
+
+PERFORMANCE & STABILITY:
+  --max-threads, -t             Number of simultaneous threads. Default: 25.
+  --open-timeout                Time in seconds. Default: 15.
+  --read-timeout                Time in seconds. Default: 30.
+  --wait=SECONDS                Wait SECONDS between connections.
+                                This is useful when using a single thread.
+
+HELP & MISCELLANEOUS:
+  --short-help                  Short usage help.
+  --help, -h                    Complete usage help.
+  --debug                       Raise errors in plugins.
+  --version                     Display version information.
+
+EXAMPLE USAGE:
+* Scan example.com.
+  ./whatweb example.com
+
+* Scan reddit.com slashdot.org with verbose plugin descriptions.
+  ./whatweb -v reddit.com slashdot.org
+
+* An aggressive scan of wired.com detects the exact version of WordPress.
+  ./whatweb -a 3 www.wired.com
+
+* Scan the local network quickly and suppress errors.
+  whatweb --no-errors 192.168.0.0/24
+
+* Scan the local network for https websites.
+  whatweb --no-errors --url-prefix https:// 192.168.0.0/24
+
+* Scan for crossdomain policies in the Alexa Top 1000.
+  ./whatweb -i plugin-development/alexa-top-100.txt \
+  --url-suffix /crossdomain.xml -p crossdomain_xml
+
+                                                                             
+┌──(kali㉿kali)-[~]
+└─$ whatweb -v -a4 ktkv.dev              
+
+
+
+
+^C/usr/lib/ruby/vendor_ruby/whatweb/scan.rb:75:in `alive?': Interrupt
+        from /usr/lib/ruby/vendor_ruby/whatweb/scan.rb:75:in `block (2 levels) in scan'
+        from /usr/lib/ruby/vendor_ruby/whatweb/scan.rb:75:in `map'
+        from /usr/lib/ruby/vendor_ruby/whatweb/scan.rb:75:in `block in scan'
+        from /usr/lib/ruby/vendor_ruby/whatweb/scan.rb:71:in `loop'
+        from /usr/lib/ruby/vendor_ruby/whatweb/scan.rb:71:in `scan'
+        from /usr/bin/whatweb:619:in `<main>'
+
+                                                                             
+┌──(kali㉿kali)-[~]
+└─$ whatweb -a4 ktkv.dev   
+^C/usr/lib/ruby/vendor_ruby/whatweb/scan.rb:75:in `alive?': Interrupt
+        from /usr/lib/ruby/vendor_ruby/whatweb/scan.rb:75:in `block (2 levels) in scan'
+        from /usr/lib/ruby/vendor_ruby/whatweb/scan.rb:75:in `map'
+        from /usr/lib/ruby/vendor_ruby/whatweb/scan.rb:75:in `block in scan'
+        from /usr/lib/ruby/vendor_ruby/whatweb/scan.rb:71:in `loop'
+        from /usr/lib/ruby/vendor_ruby/whatweb/scan.rb:71:in `scan'
+        from /usr/bin/whatweb:619:in `<main>'
+
+                                                                             
+┌──(kali㉿kali)-[~]
+└─$ whatweb -v ktkv.dev
+WhatWeb report for http://ktkv.dev
+Status    : 301 Moved Permanently
+Title     : 301 Moved Permanently
+IP        : 92.124.140.111
+Country   : RUSSIAN FEDERATION, RU
+
+Summary   : HTTPServer[nginx], nginx, RedirectLocation[https://ktkv.dev/]
+
+Detected Plugins:
+[ HTTPServer ]
+        HTTP server header string. This plugin also attempts to 
+        identify the operating system from the server header. 
+
+        String       : nginx (from server string)
+
+[ RedirectLocation ]
+        HTTP Server string location. used with http-status 301 and 
+        302 
+
+        String       : https://ktkv.dev/ (from location)
+
+[ nginx ]
+        Nginx (Engine-X) is a free, open-source, high-performance 
+        HTTP server and reverse proxy, as well as an IMAP/POP3 
+        proxy server. 
+
+        Website     : http://nginx.net/
+
+HTTP Headers:
+        HTTP/1.1 301 Moved Permanently
+        Server: nginx
+        Date: Thu, 17 Oct 2024 06:26:11 GMT
+        Content-Type: text/html
+        Content-Length: 162
+        Connection: close
+        Location: https://ktkv.dev/
+
+WhatWeb report for https://ktkv.dev/
+Status    : 200 OK
+Title     : Павел Кутиков | Задания, истории и не только
+IP        : 92.124.140.111
+Country   : RUSSIAN FEDERATION, RU
+
+Summary   : HTML5, HTTPServer[nginx], Meta-Author[Павел Кутиков], nginx, Script[module]
+
+Detected Plugins:
+[ HTML5 ]
+        HTML version 5, detected by the doctype declaration 
+
+
+[ HTTPServer ]
+        HTTP server header string. This plugin also attempts to 
+        identify the operating system from the server header. 
+
+        String       : nginx (from server string)
+
+[ Meta-Author ]
+        This plugin retrieves the author name from the meta name 
+        tag - info: 
+        http://www.webmarketingnow.com/tips/meta-tags-uncovered.html
+        #author
+
+        String       : Павел Кутиков
+
+[ Script ]
+        This plugin detects instances of script HTML elements and 
+        returns the script language/type. 
+
+        String       : module
+
+[ nginx ]
+        Nginx (Engine-X) is a free, open-source, high-performance                                 
+        HTTP server and reverse proxy, as well as an IMAP/POP3                                    
+        proxy server. 
+
+        Website     : http://nginx.net/
+
+HTTP Headers:
+        HTTP/1.1 200 OK
+        Server: nginx
+        Date: Thu, 17 Oct 2024 06:26:15 GMT
+        Content-Type: text/html
+        Content-Length: 1455
+        Last-Modified: Wed, 02 Oct 2024 19:20:13 GMT
+        Connection: close
+        ETag: "66fd9ced-5af"
+        Accept-Ranges: bytes
+
+                                                                             
+┌──(kali㉿kali)-[~]
+└─$ 
+
+
+
+
+
+
+
+
+
+
